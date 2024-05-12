@@ -3,18 +3,31 @@ const app = express();
 
 const port = 3000;
 
-app.get('/',(req,res)=>{
-    res.send('Hello world');
-})
+app.get("/", (req, res) => {
+  res.send("Hello world");
+});
 
-require('dotenv').config();
-const Project = require('./Project')
-app.get('/projects',async(req,res)=>{
+require("dotenv").config();
+const Project = require("./Project");
+
+
+app.get("/projects", async (req, res) => {
+  try {
+    const projects = await Project.find();
+    res.json(projects);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+const Blog = require('./Blogs')
+
+app.get("/blogs",async (req,res)=>{
     try{
-        const projects = await Project.find();
-        res.json(projects);
+        const blogs = await Blog.find();
+        res.json(blogs);
     }
-    catch (err){
+    catch(err){
         res.status(500).json({message:err.message})
     }
 })
